@@ -36,7 +36,7 @@ public class Calculator {
 			}
 		}catch(IllegalArgumentException Ie) {
 			exceptionStatus = true;
-			this.result = "Cannot be divided by /0";
+			this.result = "Cannot be divided by 0";
 		}
 		return exceptionStatus;
 	}

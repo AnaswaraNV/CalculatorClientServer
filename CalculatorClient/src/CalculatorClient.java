@@ -40,38 +40,47 @@ public class CalculatorClient {
 
 				String clientCommand = null;
 				while(true) {
+					
+					try {
 
-					if(input.toUpperCase().equals("YES")){
-
-						//sending Command line to server to perform various operation
-						System.out.println("Enter command : Format is Command>> a op b");
-						System.out.println("note : Space between command");
-
-						clientCommand = keyboard.nextLine();
-						sendToServer.println(clientCommand);
-						sendToServer.flush();
-						
-						//to receive the result from server 
-						String result = receiveFromServer.readLine();
-						System.out.println(result);
-						
-						//statements asking user if he wants to continue processing
-						System.out.println("Continue ? (YES/NO)");
+						if(input.toUpperCase().equals("YES")){
+	
+							//sending Command line to server to perform various operation
+							System.out.println("Enter command : Format is Command >> a op b");
+							System.out.println("note : Space between command");
+	
+							clientCommand = keyboard.nextLine();
+							sendToServer.println(clientCommand);
+							sendToServer.flush();
+							
+							//to receive the result from server 
+							String result = receiveFromServer.readLine();
+							System.out.println(result);
+							
+							//statements asking user if he wants to continue processing
+							System.out.println("Continue ? (YES/NO)");
+							input = keyboard.nextLine();
+	
+						}else if(input.toUpperCase().equals("NO")) {
+	
+							clientCommand = "STOP";
+							sendToServer.println(clientCommand);
+							sendToServer.flush();
+							break;
+						} else {
+							System.out.println("Enter valid input YES/NO");
+							throw new Exception();
+						}
+					} catch(Exception e) {
+						System.out.println("Try again!");
 						input = keyboard.nextLine();
-
-					}else if(input.toUpperCase().equals("NO")) {
-
-						clientCommand = "STOP";
-						sendToServer.println(clientCommand);
-						sendToServer.flush();
-						break;
-					} else {
-						System.out.println("Enter valid input YES/NO");
-						break;
 					}
 
 				} //End while
-
+				
+				sendToServer.println("Client: closing the connection...");
+				sendToServer.flush();
+				
 			}catch(EOFException eof) {
 				System.out.println( "The server has terminated connection!" );
 			}
@@ -83,7 +92,7 @@ public class CalculatorClient {
 			/* step 4: close the connection to the server
 			 */
 			System.out.println( "Client: closing the connection..." );
-
+			
 			clientSocket.close();
 			sendToServer.close();
 			receiveFromServer.close();

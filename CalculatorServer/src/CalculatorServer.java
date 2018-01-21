@@ -7,7 +7,7 @@
  * 		@version 1.0
  * 		@author  Anaswara Naderi Vadakkeperatta
  * 
- *        
+ *       Reference: https://www.javatpoint.com/java-simpledateformat 
  */
 
 import java.net.*;
@@ -75,14 +75,16 @@ class HandleClientThread extends Thread {
 			String strDate= formatter.format(date);
 			
 			//first set of data sent to client with date 
-			String respToClient = " Simple Calculator " + strDate + " - response (sent to the client): ";
+			String respToClient = " Simple Calculator " + strDate;
+			System.out.println(respToClient + "- response (sent to the client): ");
 			System.out.println(respToClient);
 			sendToClient.println(respToClient);
 			sendToClient.flush();
 
 
 			try {
-				String responseLine = null; 
+				
+				String responseLine = null;
 				
 				do { //keep on reading until client send STOP
 					
@@ -100,8 +102,12 @@ class HandleClientThread extends Thread {
 						
 						break;
 					}
-
-				}while(!responseLine.equals("STOP"));// end do while				
+					
+				}while(!responseLine.equals("STOP"));// end do while		
+				
+				//Display client closing string
+				String endString = receiveFromClient.readLine();
+				System.out.println(endString);
 
 			} catch(EOFException eof) {
 				// loss of connection
@@ -110,6 +116,9 @@ class HandleClientThread extends Thread {
 			catch(IOException e) {
 				System.out.println("Error in I/O Exchange");
 				e.printStackTrace();  	
+			}
+			catch(Exception e) {
+				System.out.println("Please check input!");
 			}
 			
 
@@ -155,14 +164,14 @@ class HandleClientThread extends Thread {
 									}
 									
 									//Storing split strings in variables to further processing
-									double num1 = Double.parseDouble(input.get(1).toString());//num1
-									String operator = input.get(2).toString();//operator
-									double num2 = Double.parseDouble(input.get(3).toString());//num2
+									double num1 = Double.parseDouble(input.get(2).toString());//num1
+									String operator = input.get(3).toString();//operator
+									double num2 = Double.parseDouble(input.get(4).toString());//num2
 									
 									System.out.println("client requested  calculation:" + 
-											input.get(1).toString() + " " + 
 											input.get(2).toString() + " " + 
-											input.get(3).toString());
+											input.get(3).toString() + " " + 
+											input.get(4).toString());
 									//Switch case to call calculator functions.
 									switch(operator) {
 										case "+" : 	cal.add(num1, num2); 
